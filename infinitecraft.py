@@ -23,7 +23,6 @@ def combine(elem):
         return None
 
 def main():
-    print("Starting, press CTRL+C to stop")
     current_elements = ["Water", "Fire", "Wind", "Earth"]
     history = []  # Keep track of combinations tried
     emojis = {"Water": "💧", "Fire": "🔥", "Wind": "🌬️", "Earth": "🌍"}  # Initial emojis
@@ -38,22 +37,17 @@ def main():
         if suggestion and len(suggestion) == 2 and all(elem in current_elements for elem in suggestion):
             combined_elements = (suggestion[0], suggestion[1])
             result = combine(combined_elements)
+            history.append({'first': suggestion[0], 'second': suggestion[1], 'result': result["result"]})
+            
             if result and result["result"] not in current_elements:
                 current_elements.append(result["result"])
-                history.append({'first': suggestion[0], 'second': suggestion[1], 'result': result["result"]})
-
                 # Update emojis dictionary with new element's emoji if it's provided
                 if "emoji" in result:
                     emojis[result["result"]] = result["emoji"]
-
-                # Print the combination and result with emojis
-                print(f"{emojis.get(suggestion[0], '❓')} {suggestion[0]} + {emojis.get(suggestion[1], '❓')} {suggestion[1]} -> {emojis.get(result['result'], '❓')} {result['result']}")
-                
                 if result["result"] == target:
                     print(f"Successfully created {target}!")
                     break
-            else:
-                print(f"Failed to combine {suggestion[0]} and {suggestion[1]} or already known.")
+            print(f"{emojis.get(suggestion[0], '❓')} {suggestion[0]} + {emojis.get(suggestion[1], '❓')} {suggestion[1]} -> {emojis.get(result['result'], '❓')} {result['result']}")
         else:
             print("Invalid suggestion or elements not in current list.")
 
