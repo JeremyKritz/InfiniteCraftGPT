@@ -32,7 +32,9 @@ def main():
         
         # Assuming system_prompt and iterative_prompt are properly defined and return the correct strings
         prompt = iterative_prompt(current_elements, history)
-        suggestion = send_prompt_to_gpt3(system_prompt(), prompt)
+        json_suggestion = json.loads(send_prompt_to_gpt3(system_prompt(), prompt))
+        suggestion = json_suggestion["elements"].split(", ")
+        reasoning = json_suggestion["reasoning"]
 
         if suggestion and len(suggestion) == 2 and all(elem in current_elements for elem in suggestion):
             combined_elements = (suggestion[0], suggestion[1])
@@ -47,6 +49,7 @@ def main():
                 if result["result"] == target:
                     print(f"Successfully created {target}!")
                     break
+            print(reasoning)
             print(f"{emojis.get(suggestion[0], '❓')} {suggestion[0]} + {emojis.get(suggestion[1], '❓')} {suggestion[1]} -> {emojis.get(result['result'], '❓')} {result['result']}")
         else:
             print("Invalid suggestion or elements not in current list.")
