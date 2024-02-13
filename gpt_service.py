@@ -2,10 +2,10 @@
 import openai
 
 # Initialize your OpenAI API key here
-openai.api_key = '' 
+openai.api_key = ''
 
 def send_prompt_to_gpt3(system, prompt):
-    print(prompt)
+    #print(prompt)
     response = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
                 messages=[
@@ -22,5 +22,5 @@ def send_prompt_to_gpt3(system, prompt):
             )
 
     suggestion = response.choices[0].message.content.strip().split(", ")
-    print(suggestion)
+    #print(suggestion)
     return suggestion

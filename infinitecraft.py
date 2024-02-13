@@ -26,19 +26,29 @@ def main():
     print("Starting, press CTRL+C to stop")
     current_elements = ["Water", "Fire", "Wind", "Earth"]
     history = []  # Keep track of combinations tried
+    emojis = {"Water": "💧", "Fire": "🔥", "Wind": "🌬️", "Earth": "🌍"}  # Initial emojis
 
     while target not in current_elements:
-        input("Press Enter to generate the next combination...")
-        # Use GPT-3 to suggest the next combination based on current elements and history
+        input("Press Enter.")
+        
+        # Assuming system_prompt and iterative_prompt are properly defined and return the correct strings
         prompt = iterative_prompt(current_elements, history)
         suggestion = send_prompt_to_gpt3(system_prompt(), prompt)
 
-        if suggestion and all(elem in current_elements for elem in suggestion):
-            result = combine(suggestion)
+        if suggestion and len(suggestion) == 2 and all(elem in current_elements for elem in suggestion):
+            combined_elements = (suggestion[0], suggestion[1])
+            result = combine(combined_elements)
             if result and result["result"] not in current_elements:
                 current_elements.append(result["result"])
                 history.append({'first': suggestion[0], 'second': suggestion[1], 'result': result["result"]})
-                print(f"Combined {suggestion[0]} and {suggestion[1]} to get {result['result']}.")
+
+                # Update emojis dictionary with new element's emoji if it's provided
+                if "emoji" in result:
+                    emojis[result["result"]] = result["emoji"]
+
+                # Print the combination and result with emojis
+                print(f"{emojis.get(suggestion[0], '❓')} {suggestion[0]} + {emojis.get(suggestion[1], '❓')} {suggestion[1]} -> {emojis.get(result['result'], '❓')} {result['result']}")
+                
                 if result["result"] == target:
                     print(f"Successfully created {target}!")
                     break
